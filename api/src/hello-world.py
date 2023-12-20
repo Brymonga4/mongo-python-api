@@ -2,7 +2,6 @@ from pymongo import MongoClient
 
 print('Hello World!')
 
-client = MongoClient()
 client = MongoClient("mongodb://root:example@mongo:27017")
 db = client.testdb
 
