@@ -10,3 +10,4 @@
     -   [Fastapi](https://fastapi.tiangolo.com/): más production ready por performance
     -   [Django](https://www.djangoproject.com/): más complejo, pero el de uso más extendido
 -   Separar en varios ficheros por utilidad: Api por un lado, mongo por otro al menos
+-   Añadir un Validator con $jsonSchema para validar los items de la lista
