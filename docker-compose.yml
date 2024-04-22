@@ -1,28 +1,39 @@
-services:
-  mongo:
-    image: mongo:latest
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongo_database:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE: testdb
-  
-  api:
-    build: api/.
-    ports:
-      - "8086:8086"
-    environment:
-      - PORT=8086
-    develop:
-      watch:
-      - action: sync
-        path: api/src
-        target: /usr/src/app
-      - action: rebuild
-        path: api/requirements.txt
+  services:
+    mongo:
+      image: mongo:6.0.13-jammy
+      restart: always
+      ports:
+        - '27017:27017'
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+        MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      volumes:
+        - mongo_database:/data/db      
+    mariadb:
+      image: mariadb:latest
+      ports:
+        - '3306:3306'
+      expose: 
+        - '3306'
+      volumes:
+        - maria_database:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD} 	  
+    api:
+      depends_on:
+        - mariadb
+      build: ./api
+      ports:
+        - "8086:8086"
+      environment:
+        PORT: ${PORT} 
+  volumes:
+    mongo_database:
+    maria_database:
 
-volumes:
-  mongo_database:
+
+
